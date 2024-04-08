@@ -1,12 +1,15 @@
 const express = require("express");
 const cors = require("cors")
-const routes = require("./routes/userRoutes")
+const userRoutes = require("./routes/userRoutes");
+const prodRoutes = require("./routes/productRoutes");
+const sequelize = require("./services/db_connect");
 
 class App {
     constructor(){
         this.server = express()
         this.middlewares();
         this.routes();
+        this.dbConnect();
     }
 
     middlewares(){
@@ -15,7 +18,13 @@ class App {
     }
 
     routes(){
-        this.server.use(routes);
+        this.server.use(userRoutes);
+        this.server.use(prodRoutes)
+    }
+
+   async dbConnect(){
+        await sequelize.authenticate();
+        await sequelize.sync()
     }
 }
 

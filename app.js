@@ -24,7 +24,7 @@ class App {
 
    async dbConnect(){
         await sequelize.authenticate();
-        await sequelize.sync()
+        await sequelize.sync()// ({force: true})
     }
 }
 

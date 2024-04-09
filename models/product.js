@@ -28,6 +28,16 @@ const Product = sequelize.define(
       allowNull: false,
       
     },
+    productDetail: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      
+    },
+    nutritions: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      
+    },
    
     price: {
       type: DataTypes.DOUBLE,
@@ -43,6 +53,11 @@ const Product = sequelize.define(
         notEmpty: true,
         max: 50,
       },
+    },
+    review: {
+      type: DataTypes.INTEGER,
+      autoIncrement: false,
+      allowNull: false,
     },
   },
   {

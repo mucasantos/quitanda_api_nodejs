@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon services/server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha"
   },
   "keywords": [],
   "author": "Samuel Santos - 2024",
@@ -13,11 +13,14 @@
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.19.2",
+    "method-override": "^3.0.0",
     "mysql2": "^3.9.3",
     "nodemon": "^3.1.0",
     "sequelize": "^6.37.2"
   },
   "devDependencies": {
+    "chai": "^4.3.4",
+    "mocha": "^10.2.0",
     "sequelize-cli": "^6.6.2"
   }
 }

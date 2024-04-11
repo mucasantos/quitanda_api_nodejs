@@ -1,10 +1,10 @@
 const { Product } = require("../models/product")
 const { Category } = require("../models/category")
-
+const { Favorite } = require("../models/favorite")
 
 exports.getProducts = async (req, res, next) => {
-    const products = await Product.findAll();
 
+    const products = await Product.findAll();
     res.status(200).json({ products: products })
 
 }
@@ -12,18 +12,29 @@ exports.getProducts = async (req, res, next) => {
 exports.getProduct = async (req, res, next) => {
 
     const id = req.params.id
-    const product = await Product.findByPk(id);
 
-    if (!product) {
-        return res.status(404).json({ message: "Produto não encontrado..." })
+    try {
+        const product = await Product.findByPk(id);
+
+        if (!product) {
+            return res.status(404).json({ message: "Produto não encontrado..." })
+        }
+
+        res.status(200).json({ product: product })
+
+    } catch (error) {
+        console.log("Catch!")
+
+        next(error);
     }
-    res.status(200).json({ product: product })
+
+
 }
 
 exports.getProductByCategory = async (req, res, next) => {
 
     const id = req.params.id
-    const product = await Product.findAll({where: {categoryId: id}});
+    const product = await Product.findAll({ where: { categoryId: id } });
 
     if (!product) {
         return res.status(404).json({ message: "Produto não encontrado..." })
@@ -64,5 +75,20 @@ exports.createCategory = async (req, res, next) => {
 
 
     console.log(category);
+
+}
+
+
+exports.favoriteProduct = async (req, res, next) => {
+    console.log(req.body)
+    const favorite = new Favorite(req.body)
+
+    await favorite.save()
+        .then(result => res.status(201).json({ message: "produto criado com sucesso!!", product: result })
+
+        ).catch(err => res.status(500).json({ message: "Erro ao salvar", error: err }))
+
+
+    console.log(favorite);
 
 }

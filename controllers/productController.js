@@ -49,12 +49,18 @@ exports.getCategories = async (req, res, next) => {
 
 }
 
-exports.createProduct = async (req, res, next) => {
+exports.createProduct =  (req, res, next) => {
     console.log(req.body)
+
+    if (
+        !req.isAdmin) {
+        const error = new Error("Somente Administradores podem criar produtos!")
+        error.statusCode = 403;
+        throw error;
+    }
     const product = new Product(req.body)
 
-
-    await product.save()
+     product.save()
         .then(result => res.status(201).json({ message: "produto criado com sucesso!!", product: result })
 
         ).catch(err => res.status(500).json({ message: "Erro ao salvar", error: err }))
@@ -64,11 +70,18 @@ exports.createProduct = async (req, res, next) => {
 
 }
 
-exports.createCategory = async (req, res, next) => {
+exports.createCategory =  (req, res, next) => {
+
+    if (
+        !req.isAdmin) {
+        const error = new Error("Somente Administradores podem criar categorias!")
+        error.statusCode = 403;
+         error;
+    }
     console.log(req.body)
     const category = new Category(req.body)
 
-    await category.save()
+     category.save()
         .then(result => res.status(201).json({ message: "Categoria criada com sucesso!!", product: result })
 
         ).catch(err => res.status(500).json({ message: "Erro ao salvar", error: err }))

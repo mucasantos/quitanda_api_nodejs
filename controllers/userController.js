@@ -63,12 +63,21 @@ exports.userSignUp = async (req, res, next) => {
     user.isAdmin = false; //garante que o user não seja admin na criação
     user.password = passEncripted;
 
+    let newUser;
 
     user.save()
-        .then(result => {
-            result.password = undefined;
-            res.status(200).json({ message: "Usuário cadastrado com sucesso!", user: result })
+        .then(user => {
+            user.password = undefined;
 
-        })
+            newUser = user;
+
+            return user.createCart()
+        }).then(
+            user => res.status(200).json({ message: "Usuário cadastrado com sucesso!", user: newUser })
+
+        )
         .catch(error => next(error))
+
+
+
 }

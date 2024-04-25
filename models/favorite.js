@@ -20,9 +20,6 @@ const Favorite = sequelize.define(
 );
 
 
-Favorite.belongsTo(User)
-Favorite.belongsTo(Product)
-
 module.exports = {
   sequelize,
   Favorite,

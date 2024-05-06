@@ -47,6 +47,12 @@ exports.userSignUp = async (req, res, next) => {
 
     const { email, password } = req.body
 
+    if (Object.keys(req.body).length === 0) {
+        const error = new Error("Verifique os dados digitados!")
+        error.statusCode = 500
+       return next(error)
+    }
+
     User.findOne({ where: { email: email } })
         .then(user => {
             if (user) {

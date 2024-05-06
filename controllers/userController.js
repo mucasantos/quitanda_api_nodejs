@@ -45,7 +45,7 @@ exports.userLogin = (req, res, next) => {
 
 }
 
-exports.userSignUp = async (req, res, next) => {
+exports.userSignUp = (req, res, next) => {
 
     const errors = validationResult(req);
 
@@ -64,7 +64,7 @@ exports.userSignUp = async (req, res, next) => {
     if (Object.keys(req.body).length === 0) {
         const error = new Error("Verifique os dados digitados!")
         error.statusCode = 500
-       return next(error)
+        return next(error)
     }
 
     User.findOne({ where: { email: email } })
@@ -77,7 +77,11 @@ exports.userSignUp = async (req, res, next) => {
         })
         .catch(err => next(err))
 
-    const passEncripted = await bcrypt.hash(password, 12)
+    var passEncripted;
+
+    bcrypt.hash(password, 12).
+        then(pass => passEncripted = pass)
+        .catch(err => { throw err })
 
     const user = new User(req.body)
     user.isAdmin = false; //garante que o user não seja admin na criação

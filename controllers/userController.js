@@ -1,6 +1,8 @@
 const { User } = require("../models/user")
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken");
+const { validationResult } = require("express-validator");
+
 
 
 exports.userLogin = (req, res, next) => {
@@ -44,6 +46,18 @@ exports.userLogin = (req, res, next) => {
 }
 
 exports.userSignUp = async (req, res, next) => {
+
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+        //Criei um objeto do tipo ERROR e adicionei (com os nomes que escolhi)
+        //mais duas propriedades: data e statusCode
+        const error = new Error("Falha de validação");
+        error.statusCode = 422;
+        error.data = errors.array();
+        throw error;
+    }
+
 
     const { email, password } = req.body
 

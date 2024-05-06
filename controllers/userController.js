@@ -61,12 +61,6 @@ exports.userSignUp = (req, res, next) => {
 
     const { email, password } = req.body
 
-    if (Object.keys(req.body).length === 0) {
-        const error = new Error("Verifique os dados digitados!")
-        error.statusCode = 500
-        return next(error)
-    }
-
     User.findOne({ where: { email: email } })
         .then(user => {
             if (user) {
@@ -77,31 +71,30 @@ exports.userSignUp = (req, res, next) => {
         })
         .catch(err => next(err))
 
-    var passEncripted;
-
-    bcrypt.hash(password, 12).
-        then(pass => passEncripted = pass)
-        .catch(err => { throw err })
-
-    const user = new User(req.body)
-    user.isAdmin = false; //garante que o user não seja admin na criação
-    user.password = passEncripted;
-
     let newUser;
 
-    user.save()
-        .then(user => {
+    bcrypt.hash(password, 12).
+        then(passEncripted => {
+
+            const user = new User(req.body)
+            user.isAdmin = false; //garante que o user não seja admin na criação
+            user.password = passEncripted;
+
+            return user.save();
+
+        }).then(user => {
             user.password = undefined;
 
             newUser = user;
 
             return user.createCart()
-        }).then(
+        }
+
+        ).then(
             user => res.status(200).json({ message: "Usuário cadastrado com sucesso!", user: newUser })
 
         )
-        .catch(error => next(error))
-
+        .catch(err => { throw err })
 
 
 }

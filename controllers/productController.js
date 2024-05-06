@@ -60,6 +60,8 @@ exports.createProduct =  (req, res, next) => {
     }
     const product = new Product(req.body)
 
+    product.userId = req.userId;
+
      product.save()
         .then(result => res.status(201).json({ message: "produto criado com sucesso!!", product: result })
 

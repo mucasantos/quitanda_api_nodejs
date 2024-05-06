@@ -23,21 +23,21 @@ const Product = sequelize.define(
         max: 50,
       },
     },
-    imageUrl: {
+    image: {
       type: DataTypes.STRING,
       allowNull: false,
       
     },
-    productDetail: {
+    description: {
       type: DataTypes.STRING,
       allowNull: false,
       
     },
-    nutritions: {
-      type: DataTypes.STRING,
-      allowNull: false,
+   // nutritions: {
+   //   type: DataTypes.STRING,
+   //   allowNull: false,
       
-    },
+  //  },
    
     price: {
       type: DataTypes.DOUBLE,
@@ -46,14 +46,14 @@ const Product = sequelize.define(
         notEmpty: true,
       },
     },
-    measure: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notEmpty: true,
-        max: 50,
-      },
-    },
+   // measure: {
+   //   type: DataTypes.STRING,
+   //   allowNull: false,
+   //   validate: {
+   //     notEmpty: true,
+   //     max: 50,
+   //   },
+    //},
     review: {
       type: DataTypes.INTEGER,
       autoIncrement: false,

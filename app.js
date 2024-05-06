@@ -10,7 +10,8 @@ const { User } = require("./models/user");
 const { Favorite } = require("./models/favorite");
 const { Cart } = require("./models/cart");
 const { CartItem } = require("./models/cart-item");
-const { Order } = require("./models/orders");
+const { Order } = require("./models/order");
+const { OrderItem } = require("./models/order-item");
 
 class App {
     constructor() {
@@ -36,6 +37,7 @@ class App {
         this.server.use(errors);
     }
     relations() {
+        //No caso de Admin, salvar o Id dele. Por isso temos essa relação
         Product.belongsTo(User, { constraints: true, onDelete: 'CASCADE' })
         User.hasMany(Product)
 
@@ -47,12 +49,14 @@ class App {
         Cart.belongsToMany(Product, {through: CartItem})
         Product.belongsToMany(Cart, {through: CartItem})
 
-        User.hasMany(Order)
         Order.belongsTo(User)
+        User.hasMany(Order)
+        Order.belongsToMany(Product, {through: OrderItem})
+        
     }
     async dbConnect() {
         await sequelize.authenticate();
-        await sequelize.sync()//({force: true})
+        await sequelize.sync() //({alter: true})//({force: true})
     }
 }
 

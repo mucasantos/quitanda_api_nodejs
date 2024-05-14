@@ -19,7 +19,7 @@ exports.postCart = async (req, res, next) => {
 
     const userProducts = await User.findByPk(req.userId)
         .then(user => {
-            return user.getCart()
+            return user.getCart() // Magic method do Sequelize
         }).then(cart => {
             fetchedCart = cart
             return cart.getProducts({ where: { id: prodId } })

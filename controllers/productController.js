@@ -3,32 +3,25 @@ const { Category } = require("../models/category")
 const { Favorite } = require("../models/favorite")
 
 exports.getProducts = async (req, res, next) => {
-
     const products = await Product.findAll();
     res.status(200).json({ products: products })
-
 }
 
 exports.getProduct = async (req, res, next) => {
 
     const id = req.params.id
-
     try {
         const product = await Product.findByPk(id);
 
         if (!product) {
             return res.status(404).json({ message: "Produto não encontrado..." })
         }
-
         res.status(200).json({ product: product })
-
     } catch (error) {
         console.log("Catch!")
 
         next(error);
     }
-
-
 }
 
 exports.getProductByCategory = async (req, res, next) => {
@@ -46,7 +39,6 @@ exports.getCategories = async (req, res, next) => {
     const categories = await Category.findAll();
 
     res.status(200).json({ categories: categories })
-
 }
 
 exports.createProduct =  (req, res, next) => {
@@ -66,10 +58,7 @@ exports.createProduct =  (req, res, next) => {
         .then(result => res.status(201).json({ message: "produto criado com sucesso!!", product: result })
 
         ).catch(err => res.status(500).json({ message: "Erro ao salvar", error: err }))
-
-
     console.log(product);
-
 }
 
 exports.createCategory =  (req, res, next) => {
@@ -88,9 +77,7 @@ exports.createCategory =  (req, res, next) => {
 
         ).catch(err => res.status(500).json({ message: "Erro ao salvar", error: err }))
 
-
     console.log(category);
-
 }
 
 
@@ -103,7 +90,5 @@ exports.favoriteProduct = async (req, res, next) => {
 
         ).catch(err => res.status(500).json({ message: "Erro ao salvar", error: err }))
 
-
     console.log(favorite);
-
 }

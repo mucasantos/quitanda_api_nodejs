@@ -58,7 +58,6 @@ exports.userSignUp = (req, res, next) => {
         throw error;
     }
 
-
     const { email, password } = req.body
 
     User.findOne({ where: { email: email } })
@@ -88,13 +87,8 @@ exports.userSignUp = (req, res, next) => {
             newUser = user;
 
             return user.createCart()
-        }
-
-        ).then(
+        }).then(
             user => res.status(200).json({ message: "Usuário cadastrado com sucesso!", user: newUser })
-
         )
         .catch(err => { throw err })
-
-
 }

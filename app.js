@@ -16,21 +16,18 @@ const { OrderItem } = require("./models/order-item");
 class App {
     constructor() {
         this.server = express()
-
         this.dbConnect();
         this.middlewares();
         this.routes();
         this.relations();
     }
-
+//Métodos
     middlewares() {
         this.server.use(cors());
         this.server.use(express.json());
-
     }
 
     routes() {
-
         this.server.use(userRoutes);
         this.server.use(prodRoutes)
         this.server.use(shopRoutes)
@@ -51,8 +48,7 @@ class App {
 
         Order.belongsTo(User)
         User.hasMany(Order)
-        Order.belongsToMany(Product, {through: OrderItem})
-        
+        Order.belongsToMany(Product, {through: OrderItem})      
     }
     async dbConnect() {
         await sequelize.authenticate();

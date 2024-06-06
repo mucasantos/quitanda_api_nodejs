@@ -8,7 +8,6 @@ exports.getCart = async (req, res, next) => {
     })
     .then((cart) => cart.getProducts());
 
-  console.log(userProducts);
   res
     .status(200)
     .json({ message: "Carrinho do Usuário", cartProducts: userProducts });
@@ -17,7 +16,7 @@ exports.getCart = async (req, res, next) => {
 //Ajustar a quintidade devolvida
 exports.postCart = async (req, res, next) => {
   const prodId = req.body.productId;
-  const quantity = req.body.quantity;
+  const quantity = req.body.quantity || 1;
 
   let newQuantity;
   let fetchedCart;
@@ -42,7 +41,7 @@ exports.postCart = async (req, res, next) => {
         return product;
       }
       newQuantity = quantity
-      
+
       return Product.findByPk(prodId);
     })
     .then((product) => {
@@ -56,6 +55,32 @@ exports.postCart = async (req, res, next) => {
     .status(200)
     .json({ message: "Carrinho do Usuário", cartProducts: userProducts });
 };
+
+exports.postCartDeleteProduct = async (req, res, next) => {
+  const prodId = req.body.productId;
+
+  const userLogged = await User.findByPk(req.userId).then(user => {
+    return user.getCart();
+  }).then(cart => {
+    return cart.getProducts({ where: { id: prodId } })
+  }).then(products => {
+    const product = products[0]
+
+    if (!product) {
+      return res
+        .status(404)
+        .json({ message: "Produto não existe no carrinho!!" });
+    }
+
+    product.cartItem.destroy(); // Apaga apenas da tabela intermediária
+  }).then(result => {
+    res
+      .status(200)
+      .json({ message: "Produto excluído com sucesso!", data: result });
+
+  }).catch(err => console.log(err))
+}
+
 
 //Pegar todos os CartItem e colocar no Order
 exports.postOrder = async (req, res, next) => {

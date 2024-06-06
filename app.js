@@ -41,6 +41,7 @@ class App {
         Favorite.belongsTo(User)
         Favorite.belongsTo(Product)
 
+        //Relação carrinho
         User.hasOne(Cart)
         Cart.belongsTo(User) //Optional
         Cart.belongsToMany(Product, {through: CartItem})

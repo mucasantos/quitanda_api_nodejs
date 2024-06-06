@@ -87,6 +87,7 @@ exports.userSignUp = (req, res, next) => {
 
           newUser = user;
 
+          //Este método é dado pelo Sequelize!
           return user.createCart();
         })
         .then((user) =>

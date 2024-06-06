@@ -48,8 +48,8 @@ class App {
         Product.belongsToMany(Cart, {through: CartItem})
 
         Order.belongsTo(User)
-        User.hasMany(Order)
-        Order.belongsToMany(Product, {through: OrderItem})      
+        User.hasMany(Order) //1-N
+        Order.belongsToMany(Product, {through: OrderItem}) // M-N    
     }
     async dbConnect() {
         await sequelize.authenticate();

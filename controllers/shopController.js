@@ -83,8 +83,9 @@ exports.postCartDeleteProduct = async (req, res, next) => {
 
 
 //Pegar todos os CartItem e colocar no Order
-exports.postOrder = async (req, res, next) => {
+exports.createOrder = async (req, res, next) => {
   let userLogged;
+  let fetchedCart;
 
   const userProducts = await User.findByPk(req.userId)
     .then((user) => {
@@ -93,7 +94,7 @@ exports.postOrder = async (req, res, next) => {
     })
 
     .then((cart) => {
-      console.log(cart);
+      fetchedCart = cart
       return cart.getProducts();
     })
     .then((products) => {
@@ -108,6 +109,29 @@ exports.postOrder = async (req, res, next) => {
         );
       });
     })
-    .then((result) => res.json(result))
+    .then((result) => {
+      //Apagar todos os produtos do Cart após gravar o pedido (order)
+
+      return fetchedCart.setProducts(null)
+
+    }).then(data => {
+      res.status(200)
+        .json({ "message": "Pedido Criado com sucesso!", data: data })
+    })
     .catch((err) => console.log(err));
 };
+
+exports.getOrders = async (req, res, next) => {
+  const userOrders = await User.findByPk(req.userId)
+    .then(user => {
+      return user.getOrders({ include: ['products'] }) //Devolve os produtos - por causa da relação entre eles
+    })
+    .then(orders => {
+
+      res.status(200)
+        .json({ "message": "Pedido Criado com sucesso!", orders: orders })
+
+    }).catch(err => console.log(err))
+
+
+}
